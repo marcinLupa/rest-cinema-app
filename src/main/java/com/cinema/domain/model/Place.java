@@ -3,6 +3,7 @@ package com.cinema.domain.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -14,15 +15,14 @@ import java.util.Set;
 @Getter
 
 @Entity
-@Table(name = "movies")
-public class Movie {
+@Table(name = "places")
+public class Place {
     @Id
     @GeneratedValue
     private Long id;
-    private String title;
-    private Integer duration;
+    private String name;
 
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "place")
     private Set<Seance> seances;
 
 }
