@@ -1,5 +1,6 @@
 package com.cinema.domain.model;
 
+import com.cinema.domain.model.enums.Genre;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,7 +22,8 @@ public class Movie {
     private Long id;
     private String title;
     private Integer duration;
-
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
     @OneToMany(mappedBy = "movie")
     private Set<Seance> seances;
 
