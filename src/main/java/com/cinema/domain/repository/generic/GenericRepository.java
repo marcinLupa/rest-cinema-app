@@ -7,6 +7,6 @@ public interface GenericRepository<T,ID> {
 
     Optional<T> findOne(ID id);
     List<T> findAll();
-    Optional<T> add(T t);
+    Optional<T> save(T t);
     void delete(ID id);
 }

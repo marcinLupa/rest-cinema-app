@@ -1,6 +1,5 @@
 package com.cinema.infrastructure.repository.impl;
 
-import com.cinema.domain.model.Movie;
 import com.cinema.domain.model.Place;
 import com.cinema.domain.repository.PlaceRepository;
 import com.cinema.infrastructure.repository.jpa.JpaPlaceRepository;
@@ -9,10 +8,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
-public class PlaceRepositoryImpl implements PlaceRepository {
 
+public class PlaceRepositoryImpl  implements PlaceRepository
+{
     private final JpaPlaceRepository jpaPlaceRepository;
 
     @Override
@@ -26,7 +27,7 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     }
 
     @Override
-    public Optional<Place> add(Place place) {
+    public Optional<Place> save(Place place) {
         return Optional.of(jpaPlaceRepository.save(place));
     }
 
@@ -34,4 +35,5 @@ public class PlaceRepositoryImpl implements PlaceRepository {
     public void delete(Long id) {
         jpaPlaceRepository.deleteById(id);
     }
+
 }

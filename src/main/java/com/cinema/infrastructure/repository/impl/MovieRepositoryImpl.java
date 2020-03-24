@@ -25,7 +25,7 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Optional<Movie> add(Movie movie) {
+    public Optional<Movie> save(Movie movie) {
         return Optional.of(jpaMovieRepository.save(movie));
     }
 
