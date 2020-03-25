@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -25,10 +26,22 @@ public class User {
     private String surname;
     private Integer age;
 
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Ticket> ticket;
+    private Set<Ticket> tickets;
 
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "user",fetch = FetchType.EAGER)
+    private Set<Movie> favoriteMovies;
+
+    public void addMovies(Movie ... movies){
+        if(movies!=null){
+            for (Movie m : movies){
+                m.setUser(this);
+                favoriteMovies.add(m);
+            }
+        }
+    }
 }

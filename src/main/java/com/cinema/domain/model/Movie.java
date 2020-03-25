@@ -27,4 +27,7 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     private Set<Seance> seances;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private User user;
+
 }
