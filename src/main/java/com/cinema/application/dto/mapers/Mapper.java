@@ -7,7 +7,7 @@ public interface Mapper {
     static MovieDTO fromMovieToMovieDTO(Movie movie) {
         return movie == null ? null : MovieDTO
                 .builder()
-                .id(movie.getId())
+          //      .id(movie.getId())
                 .duration(movie.getDuration())
                 .genre(movie.getGenre())
                 .title(movie.getTitle())
@@ -59,7 +59,7 @@ public interface Mapper {
     static Movie fromMovieDTOtoMovie(MovieDTO movieDTO) {
         return movieDTO == null ? null : Movie
                 .builder()
-                .id(movieDTO.getId())
+           //     .id(movieDTO.getId())
                 .duration(movieDTO.getDuration())
                 .genre(movieDTO.getGenre())
                 .title(movieDTO.getTitle())

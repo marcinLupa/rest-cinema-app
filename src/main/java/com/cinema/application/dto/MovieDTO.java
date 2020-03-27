@@ -15,7 +15,6 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 public class MovieDTO {
 
-    private Long id;
     private String title;
     private Integer duration;
     private Genre genre;
