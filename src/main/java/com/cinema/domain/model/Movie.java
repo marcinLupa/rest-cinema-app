@@ -9,8 +9,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(exclude = {"seances"})
+@ToString(exclude = {"seances"})
 @Setter
 @Getter
 

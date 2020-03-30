@@ -33,4 +33,9 @@ public class MovieRepositoryImpl implements MovieRepository {
     public void delete(Long id) {
         jpaMovieRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Movie> findByTitle(String title) {
+        return Optional.of(jpaMovieRepository.findByTitle(title));
+    }
 }

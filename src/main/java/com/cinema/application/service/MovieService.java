@@ -57,25 +57,24 @@ public class MovieService {
         if (filteringMoviesDTO == null) {
             throw new AppException("FILTERING OPTION IS NULL");
         }
-        List<MovieDTO> filtratedMovies =new ArrayList<>();
+        List<MovieDTO> filtratedMovies = new ArrayList<>();
         switch (filteringMoviesDTO.getOption()) {
-            case NAME ->
-             filtratedMovies = movieRepository
-                        .findAll()
-                        .stream()
-                        .filter(x -> x.getTitle().equals(filteringMoviesDTO.getMovieDTO().getTitle()))
-                        .map(Mapper::fromMovieToMovieDTO)
-                        .collect(Collectors.toList());
+            case NAME -> filtratedMovies = movieRepository
+                    .findAll()
+                    .stream()
+                    .filter(x -> x.getTitle().equals(filteringMoviesDTO.getMovieDTO().getTitle()))
+                    .map(Mapper::fromMovieToMovieDTO)
+                    .collect(Collectors.toList());
             case DURATION_LESS_OR_THE_SAME -> filtratedMovies = movieRepository
                     .findAll()
                     .stream()
-                    .filter(x -> x.getDuration()<=filteringMoviesDTO.getMovieDTO().getDuration())
+                    .filter(x -> x.getDuration() <= filteringMoviesDTO.getMovieDTO().getDuration())
                     .map(Mapper::fromMovieToMovieDTO)
                     .collect(Collectors.toList());
             case DURATION_HIGHER -> filtratedMovies = movieRepository
                     .findAll()
                     .stream()
-                    .filter(x -> x.getDuration()>filteringMoviesDTO.getMovieDTO().getDuration())
+                    .filter(x -> x.getDuration() > filteringMoviesDTO.getMovieDTO().getDuration())
                     .map(Mapper::fromMovieToMovieDTO)
                     .collect(Collectors.toList());
             case GENRE -> filtratedMovies = movieRepository
@@ -86,6 +85,16 @@ public class MovieService {
                     .collect(Collectors.toList());
         }
         return filtratedMovies;
+    }
+
+    public Optional<MovieDTO> findByTitle(String title) {
+        if (title == null) {
+            throw new AppException("TITLE IS NULL");
+        }
+        return Optional.of(Mapper
+                .fromMovieToMovieDTO(movieRepository
+                        .findByTitle(title)
+                        .orElseThrow()));
     }
 
 }

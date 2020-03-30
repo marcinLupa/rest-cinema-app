@@ -1,7 +1,6 @@
 package com.cinema.application.service;
 
-import com.cinema.application.dto.TicketDTO;
-import com.cinema.application.dto.UserDTO;
+import com.cinema.application.dto.*;
 import com.cinema.application.dto.mapers.Mapper;
 import com.cinema.domain.repository.TicketRepository;
 import com.cinema.infrastructure.exceptions.AppException;
@@ -18,6 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
+    private final SeanceService seanceService;
+    private final PlaceService placeService;
+    private final MovieService movieService;
+
+
 
     public Optional<TicketDTO> findOne(Long id) {
         if (id == null) {
@@ -50,5 +54,27 @@ public class TicketService {
             throw new AppException("DELETE TICKET ID EXCEPTION");
         }
         ticketRepository.delete(id);
+    }
+
+    public List<TicketDTO> buyingTickets(BuyingTicketsDTO buyingTicketsDTO) {
+//        System.out.println(buyingTicketsDTO);
+//
+//            if (buyingTicketsDTO == null) {
+//                throw new AppException("BUYING TICKET DTO IS NULL EXCEPTION");
+//            }
+//            PlaceDTO placeSearch = placeService
+//                    .findByName(buyingTicketsDTO.getCityName())
+//                    .orElseThrow(() -> new AppException("CITY FROM USER OUT OF BASE"));
+//
+//            System.out.println(placeSearch);
+//
+//        MovieDTO movieSearch = movieService
+//                .findByTitle(buyingTicketsDTO.getMovieName())
+//                .orElseThrow(() -> new AppException("MOVIE FROM USER OUT OF BASE"));
+//        System.out.println(movieSearch);
+
+        System.out.println(seanceService.findByPlaceTitleDate(buyingTicketsDTO));
+
+        return List.of();
     }
 }

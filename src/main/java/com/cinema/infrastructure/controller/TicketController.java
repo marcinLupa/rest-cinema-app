@@ -1,5 +1,6 @@
 package com.cinema.infrastructure.controller;
 
+import com.cinema.application.dto.BuyingTicketsDTO;
 import com.cinema.application.dto.PlaceDTO;
 import com.cinema.application.dto.TicketDTO;
 import com.cinema.application.service.PlaceService;
@@ -37,5 +38,12 @@ public class TicketController {
     @DeleteMapping("{id}")
     public void delete(@PathVariable Long id){
         ticketService.delete(id);
+    }
+
+    @PostMapping("/buy")
+    public List<TicketDTO> buyingTickets(@RequestBody BuyingTicketsDTO buyingTicketsDTO){
+        System.out.println(buyingTicketsDTO);
+        return ticketService
+                .buyingTickets(buyingTicketsDTO);
     }
 }

@@ -26,7 +26,6 @@ public class Ticket {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seance")
     private Seance seance;
-    private Integer quantity;
     @Enumerated(EnumType.STRING)
     private KindOfTicket kindOfTicket;
 

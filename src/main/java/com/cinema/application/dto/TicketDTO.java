@@ -21,7 +21,6 @@ public class TicketDTO {
     private BigDecimal price;
     private Integer discount;
     private SeanceDTO seanceDTO;
-    private Integer quantity;
     private KindOfTicket kindOfTicket;
     private UserDTO userDTO;
 }

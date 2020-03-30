@@ -50,7 +50,6 @@ public interface Mapper {
                 .discount(ticket.getDiscount())
                 .kindOfTicket(ticket.getKindOfTicket())
                 .price(ticket.getPrice())
-                .quantity(ticket.getQuantity())
                 .seanceDTO(fromSeanceToSeanceDTO(ticket.getSeance()))
                 .userDTO(fromUserToUserDTO(ticket.getUser()))
                 .build();
@@ -102,7 +101,6 @@ public interface Mapper {
                 .discount(ticketDTO.getDiscount())
                 .kindOfTicket(ticketDTO.getKindOfTicket())
                 .price(ticketDTO.getPrice())
-                .quantity(ticketDTO.getQuantity())
                 .seance(fromSeanceDTOtoSeance(ticketDTO.getSeanceDTO()))
                 .user(fromUserDTOtoUser(ticketDTO.getUserDTO()))
                 .build();

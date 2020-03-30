@@ -36,4 +36,8 @@ public class PlaceRepositoryImpl  implements PlaceRepository
         jpaPlaceRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<Place> findByName(String name) {
+        return jpaPlaceRepository.findByName(name);
+    }
 }

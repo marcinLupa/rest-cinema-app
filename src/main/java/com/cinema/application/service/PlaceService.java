@@ -54,4 +54,11 @@ public class PlaceService {
         placeRepository.delete(id);
     }
 
+    public Optional<PlaceDTO> findByName(String name) {
+        if (name == null) {
+            throw new AppException("NAME ADD EXCEPTION");
+        }
+        return Optional.of(Mapper.fromPlaceToPlaceDTO(placeRepository
+                .findByName(name).orElseThrow()));
+    }
 }
