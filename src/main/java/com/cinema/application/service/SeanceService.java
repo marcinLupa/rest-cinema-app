@@ -56,19 +56,19 @@ public class SeanceService {
         seanceRepository.delete(id);
     }
 
-    public SeanceDTO findByPlaceTitleDate(BuyingTicketsDTO buyingTicketsDTO){
+    public Optional<SeanceDTO> findByPlaceTitleDate(BuyingTicketsDTO buyingTicketsDTO){
         if (buyingTicketsDTO == null) {
             throw new AppException("BUYING TICKET DTO IS NULL EXCEPTION");
         }
 
-   return      Mapper.fromSeanceToSeanceDTO(seanceRepository
+   return      Optional.of(Mapper.fromSeanceToSeanceDTO(seanceRepository
                 .findAll()
                 .stream()
                 .filter(x->x.getMovie().getTitle().equals(buyingTicketsDTO.getMovieName())&
                         x.getPlace().getName().equals(buyingTicketsDTO.getCityName())&
                      x.getStartOfSeance().equals(buyingTicketsDTO.getStartOfSeance()))
                 .findFirst()
-                .orElseThrow(()->new AppException("THERE IS NO SUCH SEANCE")));
+                .orElseThrow(()->new AppException("THERE IS NO SUCH SEANCE"))));
 
     }
 

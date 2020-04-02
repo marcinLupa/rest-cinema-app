@@ -51,4 +51,10 @@ public class UserService {
         }
         userRepository.delete(id);
     }
+    public Optional<UserDTO> findByEmail(String email){
+
+        return Optional.of(Mapper.fromUserToUserDTO(userRepository
+                .findByEmail(email)
+                .orElseThrow(()->new AppException("FIND BY EMAIL EXCEPTION"))));
+    }
 }

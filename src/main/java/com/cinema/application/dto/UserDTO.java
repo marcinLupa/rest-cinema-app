@@ -19,4 +19,6 @@ public class UserDTO {
     private String surname;
     private Integer age;
     private Role role;
+    private String email;
+
 }

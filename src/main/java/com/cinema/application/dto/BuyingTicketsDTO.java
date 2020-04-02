@@ -1,6 +1,6 @@
 package com.cinema.application.dto;
 
-import com.cinema.domain.model.enums.KindOfTicket;
+import com.cinema.domain.model.enums.Discount;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Set;
+import java.util.EnumSet;
 
 @Builder
 @Data
@@ -24,6 +22,8 @@ public class BuyingTicketsDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startOfSeance;
-    private List<UserDTO> userDTOList;
+    private String email;
+    private Integer ticketQuantity;
+    private EnumSet<Discount> discounts;
 
 }

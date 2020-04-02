@@ -9,4 +9,5 @@ public interface GenericRepository<T,ID> {
     List<T> findAll();
     Optional<T> save(T t);
     void delete(ID id);
+
 }

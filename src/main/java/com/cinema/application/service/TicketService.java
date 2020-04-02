@@ -1,26 +1,39 @@
 package com.cinema.application.service;
 
-import com.cinema.application.dto.*;
+import com.cinema.application.dto.BuyingTicketsDTO;
+import com.cinema.application.dto.SeanceDTO;
+import com.cinema.application.dto.TicketDTO;
+import com.cinema.application.dto.UserDTO;
 import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.domain.model.enums.Discount;
 import com.cinema.domain.repository.TicketRepository;
 import com.cinema.infrastructure.exceptions.AppException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final SeanceService seanceService;
     private final PlaceService placeService;
     private final MovieService movieService;
+    private final UserService userService;
 
+    public TicketService(TicketRepository ticketRepository, SeanceService seanceService, PlaceService placeService, MovieService movieService, UserService userService) {
+        this.ticketRepository = ticketRepository;
+        this.seanceService = seanceService;
+        this.placeService = placeService;
+        this.movieService = movieService;
+        this.userService = userService;
+    }
 
 
     public Optional<TicketDTO> findOne(Long id) {
@@ -57,24 +70,35 @@ public class TicketService {
     }
 
     public List<TicketDTO> buyingTickets(BuyingTicketsDTO buyingTicketsDTO) {
-//        System.out.println(buyingTicketsDTO);
-//
-//            if (buyingTicketsDTO == null) {
-//                throw new AppException("BUYING TICKET DTO IS NULL EXCEPTION");
-//            }
-//            PlaceDTO placeSearch = placeService
-//                    .findByName(buyingTicketsDTO.getCityName())
-//                    .orElseThrow(() -> new AppException("CITY FROM USER OUT OF BASE"));
-//
-//            System.out.println(placeSearch);
-//
-//        MovieDTO movieSearch = movieService
-//                .findByTitle(buyingTicketsDTO.getMovieName())
-//                .orElseThrow(() -> new AppException("MOVIE FROM USER OUT OF BASE"));
-//        System.out.println(movieSearch);
 
-        System.out.println(seanceService.findByPlaceTitleDate(buyingTicketsDTO));
+        if (buyingTicketsDTO == null) {
+            throw new AppException("BUYING TICKET NULL");
+        }
+//        if(buyingTicketsDTO.getDiscounts().size()!=buyingTicketsDTO.getTicketQuantity()){
+//////            throw new AppException("QUANTITY OF TICKETS ARE DIFFERENT THANE QUANTITY OD DISQOUNT");
+//////        }
 
-        return List.of();
+        UserDTO ticketBuyer = userService
+                .findByEmail(buyingTicketsDTO.getEmail())
+                .orElse(userService.add(UserDTO.builder()
+                        .email(buyingTicketsDTO.getEmail())
+                        .build())
+                        .orElseThrow(() -> new AppException("ADD USER EXCEPTION")));
+
+        SeanceDTO chosenSeance = seanceService
+                .findByPlaceTitleDate(buyingTicketsDTO)
+                .orElseThrow(() -> new AppException("SEANCE OUT OF BASE"));
+
+        List<TicketDTO> tickets = new ArrayList<>();
+
+        IntStream.range(0, buyingTicketsDTO.getTicketQuantity())
+                .forEach(i -> tickets.add(0, TicketDTO.builder()
+                        .userDTO(ticketBuyer)
+                        .seanceDTO(chosenSeance)
+                        .discount((Discount) buyingTicketsDTO.getDiscounts().toArray()[i])
+                        .price()
+                        .build()));
+
+        return tickets;
     }
 }

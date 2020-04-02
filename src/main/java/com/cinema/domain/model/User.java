@@ -1,11 +1,9 @@
 package com.cinema.domain.model;
 
-import com.cinema.domain.model.enums.KindOfTicket;
 import com.cinema.domain.model.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -25,6 +23,7 @@ public class User {
     private String name;
     private String surname;
     private Integer age;
+    private String email;
 
 
     @Enumerated(EnumType.STRING)

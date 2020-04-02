@@ -42,7 +42,6 @@ public class TicketController {
 
     @PostMapping("/buy")
     public List<TicketDTO> buyingTickets(@RequestBody BuyingTicketsDTO buyingTicketsDTO){
-        System.out.println(buyingTicketsDTO);
         return ticketService
                 .buyingTickets(buyingTicketsDTO);
     }

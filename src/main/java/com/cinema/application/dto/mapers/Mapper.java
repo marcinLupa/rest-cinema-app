@@ -3,6 +3,8 @@ package com.cinema.application.dto.mapers;
 import com.cinema.application.dto.*;
 import com.cinema.domain.model.*;
 
+import static com.cinema.application.dto.TicketDTO.builder;
+
 public interface Mapper {
     static MovieDTO fromMovieToMovieDTO(Movie movie) {
         return movie == null ? null : MovieDTO
@@ -22,6 +24,7 @@ public interface Mapper {
                 .name(user.getName())
                 .role(user.getRole())
                 .surname(user.getSurname())
+                .email(user.getEmail())
                 .build();
     }
 
@@ -44,12 +47,10 @@ public interface Mapper {
     }
 
     static TicketDTO fromTicketToTicketDTO(Ticket ticket) {
-        return ticket == null ? null : TicketDTO
-                .builder()
+        return ticket == null ? null : builder()
                 .id(ticket.getId())
                 .discount(ticket.getDiscount())
-                .kindOfTicket(ticket.getKindOfTicket())
-                .price(ticket.getPrice())
+                .price()
                 .seanceDTO(fromSeanceToSeanceDTO(ticket.getSeance()))
                 .userDTO(fromUserToUserDTO(ticket.getUser()))
                 .build();
@@ -73,6 +74,7 @@ public interface Mapper {
                 .name(userDTO.getName())
                 .role(userDTO.getRole())
                 .surname(userDTO.getSurname())
+                .email(userDTO.getEmail())
                 .build();
     }
 
@@ -99,7 +101,6 @@ public interface Mapper {
                 .builder()
                 .id(ticketDTO.getId())
                 .discount(ticketDTO.getDiscount())
-                .kindOfTicket(ticketDTO.getKindOfTicket())
                 .price(ticketDTO.getPrice())
                 .seance(fromSeanceDTOtoSeance(ticketDTO.getSeanceDTO()))
                 .user(fromUserDTOtoUser(ticketDTO.getUserDTO()))
