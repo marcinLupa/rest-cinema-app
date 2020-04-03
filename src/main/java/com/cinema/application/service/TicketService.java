@@ -95,10 +95,16 @@ public class TicketService {
                 .forEach(i -> tickets.add(0, TicketDTO.builder()
                         .userDTO(ticketBuyer)
                         .seanceDTO(chosenSeance)
-                        .discount((Discount) buyingTicketsDTO.getDiscounts().toArray()[i])
+                        .discount(()->
+                        {
+                            if (i >   buyingTicketsDTO.getDiscounts().toArray().length - 1) {
+                                return Discount.NORMALNY;
+                            } else {
+                                return (Discount) buyingTicketsDTO.getDiscounts().toArray()[i];
+                            }})
                         .price()
-                        .build()));
+                                .build()));
 
-        return tickets;
+                            return tickets;
+                        }
     }
-}
