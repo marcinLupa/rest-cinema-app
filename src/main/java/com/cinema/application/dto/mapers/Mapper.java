@@ -53,6 +53,7 @@ public interface Mapper {
                 .price()
                 .seanceDTO(fromSeanceToSeanceDTO(ticket.getSeance()))
                 .userDTO(fromUserToUserDTO(ticket.getUser()))
+                .transactionDate()
                 .build();
     }
 
@@ -104,6 +105,7 @@ public interface Mapper {
                 .price(ticketDTO.getPrice())
                 .seance(fromSeanceDTOtoSeance(ticketDTO.getSeanceDTO()))
                 .user(fromUserDTOtoUser(ticketDTO.getUserDTO()))
+                .transactionDate(ticketDTO.getTransactionDate())
                 .build();
     }
 }

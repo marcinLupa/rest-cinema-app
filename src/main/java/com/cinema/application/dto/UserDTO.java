@@ -21,4 +21,13 @@ public class UserDTO {
     private Role role;
     private String email;
 
+    @Override
+    public String toString() {
+        return "UserDTO id=" + id  +"\n"+
+                "   name='" + name  +"\n"+
+                "   surname='" + surname  +"\n"+
+                "   age=" + age  +"\n"+
+                "   role=" + role  +"\n"+
+                "   email='" + email  +"\n";
+    }
 }

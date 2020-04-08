@@ -25,4 +25,12 @@ public class SeanceDTO {
     private LocalDateTime startOfSeance;
     private MovieDTO movieDTO;
     private PlaceDTO placeDTO;
+
+    @Override
+    public String toString() {
+        return "SeanceDTO id=" + id  +"\n"+
+                "   startOfSeance=" + startOfSeance  +"\n"+
+               movieDTO  +"\n"+
+                placeDTO;
+    }
 }

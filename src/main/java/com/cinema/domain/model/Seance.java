@@ -8,13 +8,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@EqualsAndHashCode(exclude = {"tickets"})
+@ToString(exclude = {"tickets"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Setter
 @Getter
-@EqualsAndHashCode
 @Entity
 @Table(name = "seances")
 public class Seance {

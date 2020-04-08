@@ -1,88 +1,68 @@
 package com.cinema.application.dto;
 
 import com.cinema.domain.model.enums.Discount;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @NoArgsConstructor
 @Getter
+@Setter
+@AllArgsConstructor
 public class TicketDTO {
-
-    public final BigDecimal STANDARD_PRICE = new BigDecimal(10);
 
     private Long id;
     private BigDecimal price;
     private Discount discount;
     private SeanceDTO seanceDTO;
     private UserDTO userDTO;
-
-    public TicketDTO(Long id, BigDecimal price, Discount discount, SeanceDTO seanceDTO, UserDTO userDTO) {
-        this.id = id;
-        this.price = price;
-        this.discount = discount;
-        this.seanceDTO = seanceDTO;
-        this.userDTO = userDTO;
-    }
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime transactionDate;
 
     public static TicketDTOBuilder builder() {
         return new TicketDTOBuilder();
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = STANDARD_PRICE
-                .divide(getDiscount().discount.multiply(STANDARD_PRICE)
-                        .divide(new BigDecimal(100), RoundingMode.CEILING), RoundingMode.CEILING);
+    public String toJson() {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+
+        return gson.toJson(this);
     }
 
-    public void setDiscount(Discount discount) {
-        this.discount = Objects.requireNonNullElse(discount, Discount.NORMALNY);
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setSeanceDTO(SeanceDTO seanceDTO) {
-        this.seanceDTO = seanceDTO;
-    }
-
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
-    }
-
+//q
     public String toString() {
-        return "TicketDTO(STANDARD_PRICE=" + this.getSTANDARD_PRICE() + ",\n" +
-                "id=" + this.getId() + ", \n" +
-                "price=" + String.format("%2.2f", this.getPrice()) + ", \n" +
-                "discount=" + this.getDiscount() + "(" + this.getDiscount().discount + "%)" + ", \n" +
-                "seanceDTO=(" + this.getSeanceDTO().getMovieDTO().getTitle() + ", " +
-                this.getSeanceDTO().getPlaceDTO().getName() + ", " +
-                this.getSeanceDTO().getStartOfSeance() + ", " + ")\n" +
-                "userDTO=" + this.getUserDTO().getName() + ", " + this.getUserDTO().getSurname() + ", " +
-                this.getUserDTO().getEmail() + ", " + this.getUserDTO().getRole() + ", " + this.getUserDTO().getAge() +
-                ")" + "\n";
-
+        return "ticketDTO" + toJson();
     }
 
+    @Component
     public static class TicketDTOBuilder {
-
-        public final BigDecimal STANDARD_PRICE = new BigDecimal(10);
+        public static final BigDecimal STANDARD_PRICE = new BigDecimal(10);
 
         private Long id;
-        //   @Value("${ticket.price}")
         private BigDecimal price;
         private Discount discount;
         private SeanceDTO seanceDTO;
         private UserDTO userDTO;
+        private LocalDateTime transactionDate;
 
         TicketDTOBuilder() {
         }
@@ -108,10 +88,12 @@ public class TicketDTO {
             this.discount = Objects.requireNonNullElse(discount, Discount.NORMALNY);
             return this;
         }
+
         public TicketDTOBuilder discount(Supplier<Discount> supplier) {
-            this.discount =   supplier.get();
+            this.discount = supplier.get();
             return this;
         }
+
         public TicketDTOBuilder seanceDTO(SeanceDTO seanceDTO) {
             this.seanceDTO = seanceDTO;
             return this;
@@ -122,8 +104,18 @@ public class TicketDTO {
             return this;
         }
 
+        public TicketDTOBuilder transactionDate() {
+            this.transactionDate = LocalDateTime.now();
+            return this;
+        }
+
+        public TicketDTOBuilder transactionDate(LocalDateTime transactionDate) {
+            this.transactionDate = transactionDate;
+            return this;
+        }
+
         public TicketDTO build() {
-            return new TicketDTO(id, price, discount, seanceDTO, userDTO);
+            return new TicketDTO(id, price, discount, seanceDTO, userDTO, transactionDate);
         }
 
         public String toString() {

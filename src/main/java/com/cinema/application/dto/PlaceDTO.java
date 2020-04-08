@@ -12,4 +12,10 @@ import lombok.NoArgsConstructor;
 public class PlaceDTO {
     private Long id;
     private String name;
+
+    @Override
+    public String toString() {
+        return "PlaceDTO id=" + id  +"\n"+
+                "   name='" + name  +"\n";
+    }
 }

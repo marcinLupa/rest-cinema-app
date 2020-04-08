@@ -1,6 +1,7 @@
 package com.cinema.infrastructure.controller;
 
 import com.cinema.application.dto.BuyingTicketsDTO;
+import com.cinema.application.dto.HistoryDTO;
 import com.cinema.application.dto.PlaceDTO;
 import com.cinema.application.dto.TicketDTO;
 import com.cinema.application.service.PlaceService;
@@ -44,5 +45,10 @@ public class TicketController {
     public List<TicketDTO> buyingTickets(@RequestBody BuyingTicketsDTO buyingTicketsDTO){
         return ticketService
                 .buyingTickets(buyingTicketsDTO);
+    }
+    @PostMapping("/history")
+    public List<TicketDTO> getHistory(@RequestBody HistoryDTO historyDTO){
+        return ticketService
+                .getHistory(historyDTO);
     }
 }

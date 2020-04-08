@@ -18,4 +18,13 @@ public class MovieDTO {
     private String title;
     private Integer duration;
     private Genre genre;
+
+    @Override
+    public String toString() {
+        return  """
+                MovieDTO"""+
+                "\n"+"   title='" + title + "\n"+
+                "   duration=" + duration  +"\n"+
+                "   genre=" + genre  +"\n";
+    }
 }

@@ -9,11 +9,11 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+
 @Setter
 @Getter
-
+@EqualsAndHashCode(exclude = {"tickets"})
+@ToString(exclude = {"tickets"})
 @Entity
 @Table(name = "users")
 public class User {
