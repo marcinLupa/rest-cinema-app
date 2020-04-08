@@ -237,25 +237,25 @@ public class TicketServiceTests {
 //
 //    }
 
-    @Test
-    @DisplayName("testing getHistory method - findAll")
-    public void test3() {
-
-        Mockito
-                .when(ticketRepository.findAll())
-                .thenReturn(getTicketsDTOtoTest()
-                        .stream()
-                        .map(Mapper::fromTicketDTOtoTicket)
-                        .collect(Collectors.toList()));
-
-        ticketService
-                .getHistory(getHistoriesDTOtoTest().get(0))
-                .forEach(System.out::println);
-
-        Assertions.assertNotNull(
-                ticketService.getHistory(getHistoriesDTOtoTest().get(0)));
-
-    }
+//    @Test
+//    @DisplayName("testing getHistory method - findAll")
+//    public void test3() {
+//
+//        Mockito
+//                .when(ticketRepository.findAll())
+//                .thenReturn(getTicketsDTOtoTest()
+//                        .stream()
+//                        .map(Mapper::fromTicketDTOtoTicket)
+//                        .collect(Collectors.toList()));
+//
+//        ticketService
+//                .getHistory(getHistoriesDTOtoTest().get(0))
+//                .forEach(System.out::println);
+//
+//        Assertions.assertNotNull(
+//                ticketService.getHistory(getHistoriesDTOtoTest().get(0)));
+//
+//    }
 
     @Test
     @DisplayName("testing getHistory method - findByMovieTitle")

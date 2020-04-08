@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class MovieService {
-
     private final MovieRepository movieRepository;
     /**
      * @role Role.ADMIN
      **/
+
     public Optional<MovieDTO> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE MOVIE EXCEPTION");
@@ -68,6 +68,7 @@ public class MovieService {
      * - finding movies by e-mail title, duration and genre
      */
     public List<MovieDTO> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
+
         if (filteringMoviesDTO == null) {
             throw new AppException("FILTERING OPTION IS NULL");
         }

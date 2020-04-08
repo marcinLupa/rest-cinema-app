@@ -41,31 +41,31 @@ public class SeanceServiceTests {
                             .build())
                     .build()
     );
-    @Mock
-    private SeanceRepository seanceRepository;
-
-    @InjectMocks
-    private SeanceService seanceService;
-
-    @Test
-    @DisplayName("seance")
-    public void test1() {
-
-        Mockito
-                .when(seanceRepository
-                        .findAll())
-                .thenReturn(seances);
-
-   //     seanceRepository.findAll().forEach(System.out::println);
-
-        BuyingTicketsDTO buyingTicketsDTO = BuyingTicketsDTO.builder()
-                .cityName("LEGNICA")
-                .movieName("ACE VENTURA")
-                .startOfSeance(LocalDateTime.parse("2017-11-09T10:44", DateTimeFormatter.ISO_DATE_TIME))
-                .build();
-
-        Assertions.assertNotNull(seanceService.findByPlaceTitleDate(buyingTicketsDTO));
-    }
+//    @Mock
+//    private SeanceRepository seanceRepository;
+//
+//    @InjectMocks
+//    private SeanceService seanceService;
+//
+//    @Test
+//    @DisplayName("seance")
+//    public void test1() {
+//
+//        Mockito
+//                .when(seanceRepository
+//                        .findAll())
+//                .thenReturn(seances);
+//
+//   //     seanceRepository.findAll().forEach(System.out::println);
+//
+//        BuyingTicketsDTO buyingTicketsDTO = BuyingTicketsDTO.builder()
+//                .cityName("LEGNICA")
+//                .movieName("ACE VENTURA")
+//                .startOfSeance(LocalDateTime.parse("2017-11-09T10:44", DateTimeFormatter.ISO_DATE_TIME))
+//                .build();
+//
+//        Assertions.assertNotNull(seanceService.findByPlaceTitleDate(buyingTicketsDTO));
+//    }
 }
 
 
