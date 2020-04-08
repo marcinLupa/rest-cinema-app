@@ -1,8 +1,6 @@
 package com.cinema.infrastructure.controller;
 
-import com.cinema.application.dto.MovieDTO;
 import com.cinema.application.dto.UserDTO;
-import com.cinema.application.service.MovieService;
 import com.cinema.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +27,14 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDTO add(@RequestBody UserDTO userDTO){
+    public UserDTO add(@RequestBody UserDTO userDTO) {
         return userService
                 .add(userDTO)
                 .orElseThrow();
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
 }

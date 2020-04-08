@@ -15,7 +15,7 @@ public class PlaceDTO {
 
     @Override
     public String toString() {
-        return "PlaceDTO id=" + id  +"\n"+
-                "   name='" + name  +"\n";
+        return "PlaceDTO id=" + id + "\n" +
+                "   name='" + name + "\n";
     }
 }

@@ -2,7 +2,6 @@ package com.cinema.infrastructure.repository.impl;
 
 import com.cinema.domain.model.Seance;
 import com.cinema.domain.repository.SeanceRepository;
-import com.cinema.infrastructure.repository.jpa.JpaPlaceRepository;
 import com.cinema.infrastructure.repository.jpa.JpaSeanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

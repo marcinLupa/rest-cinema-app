@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 @Builder
 @Data
 @NoArgsConstructor
@@ -23,11 +21,11 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO id=" + id  +"\n"+
-                "   name='" + name  +"\n"+
-                "   surname='" + surname  +"\n"+
-                "   age=" + age  +"\n"+
-                "   role=" + role  +"\n"+
-                "   email='" + email  +"\n";
+        return "UserDTO id=" + id + "\n" +
+                "   name='" + name + "\n" +
+                "   surname='" + surname + "\n" +
+                "   age=" + age + "\n" +
+                "   role=" + role + "\n" +
+                "   email='" + email + "\n";
     }
 }

@@ -2,8 +2,8 @@ package com.cinema.application.service;
 
 import com.cinema.application.dto.FilteringMoviesDTO;
 import com.cinema.application.dto.MovieDTO;
-import com.cinema.application.dto.enums.FilteringOption;
 import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.MovieRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,9 @@ import java.util.stream.Collectors;
 public class MovieService {
 
     private final MovieRepository movieRepository;
-
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<MovieDTO> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE MOVIE EXCEPTION");
@@ -28,7 +30,9 @@ public class MovieService {
                 .findOne(id)
                 .orElseThrow()));
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public List<MovieDTO> findAll() {
         return movieRepository
                 .findAll()
@@ -36,7 +40,9 @@ public class MovieService {
                 .map(Mapper::fromMovieToMovieDTO)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<MovieDTO> add(MovieDTO movieDTO) {
         if (movieDTO == null) {
             throw new AppException("MOVIE DTO IS NULL");
@@ -45,56 +51,61 @@ public class MovieService {
                 .save(Mapper.fromMovieDTOtoMovie(movieDTO))
                 .orElseThrow()));
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public void delete(Long id) {
         if (id == null) {
             throw new AppException("DELETE MOVIE ID IS NULL");
         }
         movieRepository.delete(id);
     }
-
-    public List<MovieDTO> filteringMovies(FilteringMoviesDTO filteringMoviesDTO) {
+    /**
+     * Method getMovies ->
+     * @role Role.USER
+     * @param filteringMoviesDTO have fields cityName, movieName, startOfSeance,email, ticketQuantity, discounts
+     * @return returns tickets that are committed to date base
+     * - finding movies by e-mail title, duration and genre
+     */
+    public List<MovieDTO> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
         if (filteringMoviesDTO == null) {
             throw new AppException("FILTERING OPTION IS NULL");
         }
         List<MovieDTO> filtratedMovies = new ArrayList<>();
+
         switch (filteringMoviesDTO.getOption()) {
-            case NAME -> filtratedMovies = movieRepository
-                    .findAll()
+
+            case TITLE -> filtratedMovies = movieRepository
+                    .findByTitle(filteringMoviesDTO.getValue())
                     .stream()
-                    .filter(x -> x.getTitle().equals(filteringMoviesDTO.getMovieDTO().getTitle()))
                     .map(Mapper::fromMovieToMovieDTO)
                     .collect(Collectors.toList());
-            case DURATION_LESS_OR_THE_SAME -> filtratedMovies = movieRepository
-                    .findAll()
-                    .stream()
-                    .filter(x -> x.getDuration() <= filteringMoviesDTO.getMovieDTO().getDuration())
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
-            case DURATION_HIGHER -> filtratedMovies = movieRepository
-                    .findAll()
-                    .stream()
-                    .filter(x -> x.getDuration() > filteringMoviesDTO.getMovieDTO().getDuration())
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
-            case GENRE -> filtratedMovies = movieRepository
-                    .findAll()
-                    .stream()
-                    .filter(x -> x.getGenre().equals(filteringMoviesDTO.getMovieDTO().getGenre()))
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
+
+            case DURATION -> {
+                if (!filteringMoviesDTO.getValue().matches("[0-9]*")) {
+                    throw new AppException("VALUE IS NOT INTEGER");
+                }
+                filtratedMovies = movieRepository
+                        .findAllByDurationBefore(Integer.valueOf(filteringMoviesDTO.getValue()))
+                        .stream()
+                        .map(Mapper::fromMovieToMovieDTO)
+                        .collect(Collectors.toList());
+            }
+
+            case GENRE -> {
+                if (Arrays.stream(Genre.values())
+                        .map(Enum::toString)
+                        .noneMatch(genre -> genre.equals(filteringMoviesDTO.getValue()))) {
+                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
+                }
+                filtratedMovies = movieRepository
+                        .findAllByGenre(Genre.valueOf(filteringMoviesDTO.getValue()))
+                        .stream()
+                        .map(Mapper::fromMovieToMovieDTO)
+                        .collect(Collectors.toList());
+            }
         }
         return filtratedMovies;
-    }
-
-    public Optional<MovieDTO> findByTitle(String title) {
-        if (title == null) {
-            throw new AppException("TITLE IS NULL");
-        }
-        return Optional.of(Mapper
-                .fromMovieToMovieDTO(movieRepository
-                        .findByTitle(title)
-                        .orElseThrow()));
     }
 
 }

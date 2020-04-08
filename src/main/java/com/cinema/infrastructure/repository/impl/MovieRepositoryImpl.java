@@ -1,6 +1,7 @@
 package com.cinema.infrastructure.repository.impl;
 
 import com.cinema.domain.model.Movie;
+import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.MovieRepository;
 import com.cinema.infrastructure.repository.jpa.JpaMovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,17 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Optional<Movie> findByTitle(String title) {
-        return Optional.of(jpaMovieRepository.findByTitle(title));
+    public List<Movie> findByTitle(String title) {
+        return jpaMovieRepository.findAllByTitle(title);
+    }
+
+    @Override
+    public List<Movie> findAllByGenre(Genre genre) {
+        return jpaMovieRepository.findAllByGenre(genre);
+    }
+
+    @Override
+    public List<Movie> findAllByDurationBefore(Integer duration) {
+        return jpaMovieRepository.findAllByDurationBefore(duration);
     }
 }

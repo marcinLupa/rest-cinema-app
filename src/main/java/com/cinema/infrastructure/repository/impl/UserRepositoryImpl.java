@@ -1,6 +1,5 @@
 package com.cinema.infrastructure.repository.impl;
 
-import com.cinema.domain.model.Ticket;
 import com.cinema.domain.model.User;
 import com.cinema.domain.repository.UserRepository;
 import com.cinema.infrastructure.repository.jpa.JpaUserRepository;

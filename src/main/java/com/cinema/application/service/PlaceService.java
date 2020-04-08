@@ -1,9 +1,7 @@
 package com.cinema.application.service;
 
 import com.cinema.application.dto.PlaceDTO;
-import com.cinema.application.dto.UserDTO;
 import com.cinema.application.dto.mapers.Mapper;
-import com.cinema.domain.repository.MovieRepository;
 import com.cinema.domain.repository.PlaceRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,9 @@ import java.util.stream.Collectors;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
-
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<PlaceDTO> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE PLACE EXCEPTION");
@@ -29,7 +29,9 @@ public class PlaceService {
                 .findOne(id)
                 .orElseThrow()));
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public List<PlaceDTO> findAll() {
         return placeRepository
                 .findAll()
@@ -37,7 +39,9 @@ public class PlaceService {
                 .map(Mapper::fromPlaceToPlaceDTO)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<PlaceDTO> add(PlaceDTO placeDTO) {
         if (placeDTO == null) {
             throw new AppException("PLACE DTO ADD EXCEPTION");
@@ -46,7 +50,9 @@ public class PlaceService {
                 .save(Mapper.fromPlaceDTOtoPlace(placeDTO))
                 .orElseThrow()));
     }
-
+    /**
+     * @role Role.ADMIN
+     **/
     public void delete(Long id) {
         if (id == null) {
             throw new AppException("DELETE PLACE ID EXCEPTION");
@@ -54,11 +60,4 @@ public class PlaceService {
         placeRepository.delete(id);
     }
 
-    public Optional<PlaceDTO> findByName(String name) {
-        if (name == null) {
-            throw new AppException("NAME ADD EXCEPTION");
-        }
-        return Optional.of(Mapper.fromPlaceToPlaceDTO(placeRepository
-                .findByName(name).orElseThrow()));
-    }
 }

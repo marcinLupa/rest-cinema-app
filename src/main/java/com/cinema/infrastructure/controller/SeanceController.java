@@ -1,8 +1,6 @@
 package com.cinema.infrastructure.controller;
 
-import com.cinema.application.dto.PlaceDTO;
 import com.cinema.application.dto.SeanceDTO;
-import com.cinema.application.service.PlaceService;
 import com.cinema.application.service.SeanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +26,14 @@ public class SeanceController {
     }
 
     @PostMapping
-    public SeanceDTO add(@RequestBody SeanceDTO seanceDTO){
+    public SeanceDTO add(@RequestBody SeanceDTO seanceDTO) {
         return seanceService
                 .add(seanceDTO)
                 .orElseThrow();
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         seanceService.delete(id);
     }
 }

@@ -50,10 +50,10 @@ public interface Mapper {
         return ticket == null ? null : builder()
                 .id(ticket.getId())
                 .discount(ticket.getDiscount())
-                .price()
+                .price(ticket.getPrice())
                 .seanceDTO(fromSeanceToSeanceDTO(ticket.getSeance()))
                 .userDTO(fromUserToUserDTO(ticket.getUser()))
-                .transactionDate()
+                .transactionDate(ticket.getTransactionDate())
                 .build();
     }
 

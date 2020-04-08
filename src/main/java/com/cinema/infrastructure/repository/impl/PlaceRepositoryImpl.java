@@ -12,8 +12,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 
-public class PlaceRepositoryImpl  implements PlaceRepository
-{
+public class PlaceRepositoryImpl implements PlaceRepository {
     private final JpaPlaceRepository jpaPlaceRepository;
 
     @Override
@@ -36,8 +35,4 @@ public class PlaceRepositoryImpl  implements PlaceRepository
         jpaPlaceRepository.deleteById(id);
     }
 
-    @Override
-    public Optional<Place> findByName(String name) {
-        return jpaPlaceRepository.findByName(name);
-    }
 }

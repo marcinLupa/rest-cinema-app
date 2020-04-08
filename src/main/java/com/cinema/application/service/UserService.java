@@ -2,7 +2,6 @@ package com.cinema.application.service;
 
 import com.cinema.application.dto.UserDTO;
 import com.cinema.application.dto.mapers.Mapper;
-import com.cinema.domain.model.User;
 import com.cinema.domain.repository.UserRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,9 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
 
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<UserDTO> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE USER EXCEPTION");
@@ -28,6 +30,9 @@ public class UserService {
                 .orElseThrow()));
     }
 
+    /**
+     * @role Role.ADMIN
+     **/
     public List<UserDTO> findAll() {
         return userRepository
                 .findAll()
@@ -36,8 +41,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @role Role.ADMIN
+     **/
     public Optional<UserDTO> add(UserDTO userDTO) {
-        if(userDTO==null){
+        if (userDTO == null) {
             throw new AppException("USER DTO IS NULL");
         }
         return Optional.of(Mapper.fromUserToUserDTO(userRepository
@@ -45,16 +53,23 @@ public class UserService {
                 .orElseThrow()));
     }
 
+    /**
+     * @role Role.ADMIN
+     **/
     public void delete(Long id) {
-        if(id==null){
+        if (id == null) {
             throw new AppException("USER MOVIE ID IS NULL");
         }
         userRepository.delete(id);
     }
-    public Optional<UserDTO> findByEmail(String email){
+
+    /**
+     * method only to help ticket service
+     **/
+     Optional<UserDTO> findByEmail(String email) {
 
         return Optional.of(Mapper.fromUserToUserDTO(userRepository
                 .findByEmail(email)
-                .orElseThrow(()->new AppException("FIND BY EMAIL EXCEPTION"))));
+                .orElseThrow(() -> new AppException("FIND BY EMAIL EXCEPTION"))));
     }
 }

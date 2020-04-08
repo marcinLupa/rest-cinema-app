@@ -9,7 +9,6 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 @Setter
 @Getter
 @EqualsAndHashCode(exclude = {"tickets"})
@@ -32,12 +31,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Ticket> tickets;
 
-    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "user",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Movie> favoriteMovies;
 
-    public void addMovies(Movie ... movies){
-        if(movies!=null){
-            for (Movie m : movies){
+    public void addMovies(Movie... movies) {
+        if (movies != null) {
+            for (Movie m : movies) {
                 m.setUser(this);
                 favoriteMovies.add(m);
             }

@@ -151,7 +151,7 @@ public class TicketServiceTests {
         return List.of(
                 HistoryDTO.builder()
                         .email("email1@email.com")
-                        .option(FilteringOption.BY_MOVIE)
+                        .option(FilteringOption.TITLE)
                         .value("RAMBO")
                         .build(),
                 HistoryDTO.builder()
@@ -161,7 +161,7 @@ public class TicketServiceTests {
                         .build(),
                 HistoryDTO.builder()
                         .email("email2@email.com")
-                        .option(FilteringOption.BY_MOVIE)
+                        .option(FilteringOption.TITLE)
                         .value("RAMBO")
                         .build(),
                 HistoryDTO.builder()
@@ -171,30 +171,30 @@ public class TicketServiceTests {
                         .build());
     }
 
-    @Test
-    @DisplayName("tickets buyingTicketDTO method")
-    public void test1() {
-
-        BuyingTicketsDTO buyingTicketsDTO = getBuyingTicketDTOtoTest();
-
-        Mockito
-                .when(userService
-                        .findByEmail(buyingTicketsDTO.getEmail()))
-                .thenReturn(getSecondUserDTOtoTest());
-        Mockito
-                .when(userService.add(UserDTO.builder()
-                        .email(buyingTicketsDTO.getEmail())
-                        .build()))
-                .thenReturn(getSecondUserDTOtoTest());
-
-        Mockito
-                .when(seanceService.findByPlaceTitleDate(buyingTicketsDTO))
-                .thenReturn(getFirstSeanceDTOtoTest());
-
-
-        Assertions.assertNotNull(
-                ticketService.buyingTickets(buyingTicketsDTO));
-    }
+//    @Test
+//    @DisplayName("tickets buyingTicketDTO method")
+//    public void test1() {
+//
+//        BuyingTicketsDTO buyingTicketsDTO = getBuyingTicketDTOtoTest();
+//
+//        Mockito
+//                .when(userService
+//                        .findByEmail(buyingTicketsDTO.getEmail()))
+//                .thenReturn(getSecondUserDTOtoTest());
+//        Mockito
+//                .when(userService.add(UserDTO.builder()
+//                        .email(buyingTicketsDTO.getEmail())
+//                        .build()))
+//                .thenReturn(getSecondUserDTOtoTest());
+//
+//        Mockito
+//                .when(seanceService.findByPlaceTitleDate(buyingTicketsDTO))
+//                .thenReturn(getFirstSeanceDTOtoTest());
+//
+//
+//        Assertions.assertNotNull(
+//                ticketService.buyingTickets(buyingTicketsDTO));
+//    }
 
 //    @Test
 //    @DisplayName("testing builder function")
@@ -212,30 +212,30 @@ public class TicketServiceTests {
 //
 //    }
 
-    @Test
-    @DisplayName("testing getHistory method - findByUser")
-    public void test2() {
-        String email = "email1@email.com";
-        Mockito
-                .when(ticketRepository.findByUser(email))
-                .thenReturn(getTicketsDTOtoTest()
-                        .stream()
-                        .filter(x -> x.getUserDTO().getEmail().equals(email))
-                        .map(Mapper::fromTicketDTOtoTicket)
-                        .collect(Collectors.toList()));
-
-
-       ticketService.findAll().forEach(System.out::println);
-
-        System.out.println("----");
-        ticketService
-                .getHistory(getHistoriesDTOtoTest().get(0))
-                .forEach(System.out::println);
-
-        Assertions.assertNotNull(
-                ticketService.getHistory(getHistoriesDTOtoTest().get(0)));
-
-    }
+//    @Test
+//    @DisplayName("testing getHistory method - findByUser")
+//    public void test2() {
+//        String email = "email1@email.com";
+//        Mockito
+//                .when(ticketRepository.findByUser(email))
+//                .thenReturn(getTicketsDTOtoTest()
+//                        .stream()
+//                        .filter(x -> x.getUserDTO().getEmail().equals(email))
+//                        .map(Mapper::fromTicketDTOtoTicket)
+//                        .collect(Collectors.toList()));
+//
+//
+//       ticketService.findAll().forEach(System.out::println);
+//
+//        System.out.println("----");
+//        ticketService
+//                .getHistory(getHistoriesDTOtoTest().get(0))
+//                .forEach(System.out::println);
+//
+//        Assertions.assertNotNull(
+//                ticketService.getHistory(getHistoriesDTOtoTest().get(0)));
+//
+//    }
 
     @Test
     @DisplayName("testing getHistory method - findAll")

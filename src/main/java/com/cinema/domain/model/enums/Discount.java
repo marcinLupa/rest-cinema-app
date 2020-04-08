@@ -1,12 +1,7 @@
 package com.cinema.domain.model.enums;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-
 import java.math.BigDecimal;
-import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 public enum Discount {

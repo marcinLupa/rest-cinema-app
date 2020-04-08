@@ -3,20 +3,15 @@ package com.cinema.application.dto;
 import com.cinema.domain.model.enums.Discount;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
+
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,7 +43,7 @@ public class TicketDTO {
         return gson.toJson(this);
     }
 
-//q
+    //q
     public String toString() {
         return "ticketDTO" + toJson();
     }
@@ -81,6 +76,11 @@ public class TicketDTO {
             this.price = STANDARD_PRICE.subtract(
                     STANDARD_PRICE.multiply(discount.discount)
                             .divide(new BigDecimal(100)));
+            return this;
+        }
+
+        public TicketDTOBuilder price(BigDecimal price) {
+            this.price = price;
             return this;
         }
 
