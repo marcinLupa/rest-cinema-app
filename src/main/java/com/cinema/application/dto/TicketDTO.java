@@ -23,6 +23,7 @@ import com.google.gson.GsonBuilder;
 public class TicketDTO {
 
     private Long id;
+
     private BigDecimal price;
     private Discount discount;
     private SeanceDTO seanceDTO;

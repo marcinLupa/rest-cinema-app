@@ -1,24 +1,22 @@
 package com.cinema.domain.model;
 
 import com.cinema.domain.model.enums.Role;
+import com.cinema.domain.model.generic.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-@EqualsAndHashCode(exclude = {"tickets"})
-@ToString(exclude = {"tickets"})
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class User extends BaseEntity {
+
     private String name;
     private String surname;
     private Integer age;

@@ -1,24 +1,23 @@
 package com.cinema.domain.model;
 
+import com.cinema.domain.model.generic.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"seances"})
-@ToString(exclude = {"seances"})
+@SuperBuilder
 @Setter
 @Getter
 
+
 @Entity
 @Table(name = "places")
-public class Place {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Place extends BaseEntity {
+
     private String name;
 
     @OneToMany(mappedBy = "place")

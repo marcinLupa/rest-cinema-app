@@ -1,27 +1,23 @@
 package com.cinema.domain.model;
 
 import com.cinema.domain.model.enums.Discount;
+import com.cinema.domain.model.generic.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-@Builder
-@EqualsAndHashCode
-@ToString
-@Getter
+@AllArgsConstructor
 @Setter
+@Getter
+
 @Entity
 @Table(name = "tickets")
-public class Ticket {
-
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Ticket extends BaseEntity {
 
     private BigDecimal price;
 

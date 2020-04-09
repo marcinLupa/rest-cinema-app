@@ -3,6 +3,7 @@ package com.cinema.application.service;
 import com.cinema.application.dto.FilteringMoviesDTO;
 import com.cinema.application.dto.MovieDTO;
 import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.application.exceptions.MovieServiceException;
 import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.MovieRepository;
 import com.cinema.infrastructure.exceptions.AppException;
@@ -24,7 +25,7 @@ public class MovieService {
 
     public Optional<MovieDTO> findOne(Long id) {
         if (id == null) {
-            throw new AppException("FIND ONE MOVIE EXCEPTION");
+            throw new MovieServiceException("FIND ONE MOVIE EXCEPTION");
         }
         return Optional.of(Mapper.fromMovieToMovieDTO(movieRepository
                 .findOne(id)
@@ -44,8 +45,12 @@ public class MovieService {
      * @role Role.ADMIN
      **/
     public Optional<MovieDTO> add(MovieDTO movieDTO) {
+        String s =null;
+        if (s == null) {
+            throw new MovieServiceException("MOVIE DTO IS NULL");
+        }
         if (movieDTO == null) {
-            throw new AppException("MOVIE DTO IS NULL");
+            throw new MovieServiceException("MOVIE DTO IS NULL");
         }
         return Optional.of(Mapper.fromMovieToMovieDTO(movieRepository
                 .save(Mapper.fromMovieDTOtoMovie(movieDTO))
@@ -56,7 +61,7 @@ public class MovieService {
      **/
     public void delete(Long id) {
         if (id == null) {
-            throw new AppException("DELETE MOVIE ID IS NULL");
+            throw new MovieServiceException("DELETE MOVIE ID IS NULL");
         }
         movieRepository.delete(id);
     }
@@ -70,7 +75,7 @@ public class MovieService {
     public List<MovieDTO> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
 
         if (filteringMoviesDTO == null) {
-            throw new AppException("FILTERING OPTION IS NULL");
+            throw new MovieServiceException("FILTERING OPTION IS NULL");
         }
         List<MovieDTO> filtratedMovies = new ArrayList<>();
 
