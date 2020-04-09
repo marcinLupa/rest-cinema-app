@@ -43,6 +43,16 @@ public class TicketServiceTests {
     @InjectMocks
     private TicketService ticketService;
 
+    private static List<TicketDTO> tickets;
+
+    @BeforeAll
+    public static void beforeAll() {
+        String[] elements = TicketServiceTests.class.getResource("").toString().split("target");
+        String path = elements[0].substring(6) + "src/test/resources/";
+        String fullPath = path + "data.json";
+        System.out.println(fullPath);
+    }
+
 
     private static Optional<UserDTO> getFirstUserDTOtoTest() {
         return Optional.of(UserDTO.builder()
