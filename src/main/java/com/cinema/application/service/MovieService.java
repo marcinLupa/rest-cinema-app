@@ -4,9 +4,10 @@ import com.cinema.application.dto.FilteringMoviesDTO;
 import com.cinema.application.dto.MovieDTO;
 import com.cinema.application.dto.mapers.Mapper;
 import com.cinema.application.exceptions.MovieServiceException;
+import com.cinema.application.validator.impl.FilteringMovieDtoValidator;
+import com.cinema.application.validator.impl.MovieDtoValidator;
 import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.MovieRepository;
-import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final FilteringMovieDtoValidator filteringValidator;
+    private final MovieDtoValidator validator;
+
+
     /**
      * @role Role.ADMIN
      **/
@@ -31,6 +36,7 @@ public class MovieService {
                 .findOne(id)
                 .orElseThrow()));
     }
+
     /**
      * @role Role.ADMIN
      **/
@@ -41,21 +47,22 @@ public class MovieService {
                 .map(Mapper::fromMovieToMovieDTO)
                 .collect(Collectors.toList());
     }
+
     /**
      * @role Role.ADMIN
      **/
     public Optional<MovieDTO> add(MovieDTO movieDTO) {
-        String s =null;
-        if (s == null) {
-            throw new MovieServiceException("MOVIE DTO IS NULL");
+        validator.validate(movieDTO);
+
+        if (validator.hasErrors()) {
+            throw new MovieServiceException(validator.getExceptionMessage());
         }
-        if (movieDTO == null) {
-            throw new MovieServiceException("MOVIE DTO IS NULL");
-        }
+
         return Optional.of(Mapper.fromMovieToMovieDTO(movieRepository
                 .save(Mapper.fromMovieDTOtoMovie(movieDTO))
                 .orElseThrow()));
     }
+
     /**
      * @role Role.ADMIN
      **/
@@ -65,17 +72,23 @@ public class MovieService {
         }
         movieRepository.delete(id);
     }
+
+
     /**
      * Method getMovies ->
-     * @role Role.USER
+     *
      * @param filteringMoviesDTO have fields cityName, movieName, startOfSeance,email, ticketQuantity, discounts
      * @return returns tickets that are committed to date base
      * - finding movies by e-mail title, duration and genre
+     * @role Role.USER
      */
     public List<MovieDTO> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
 
-        if (filteringMoviesDTO == null) {
-            throw new MovieServiceException("FILTERING OPTION IS NULL");
+        filteringValidator.validate(filteringMoviesDTO);
+
+        if (filteringValidator.hasErrors()) {
+
+            throw new MovieServiceException(filteringValidator.getExceptionMessage());
         }
         List<MovieDTO> filtratedMovies = new ArrayList<>();
 
@@ -87,29 +100,17 @@ public class MovieService {
                     .map(Mapper::fromMovieToMovieDTO)
                     .collect(Collectors.toList());
 
-            case DURATION -> {
-                if (!filteringMoviesDTO.getValue().matches("[0-9]*")) {
-                    throw new AppException("VALUE IS NOT INTEGER");
-                }
-                filtratedMovies = movieRepository
-                        .findAllByDurationBefore(Integer.valueOf(filteringMoviesDTO.getValue()))
-                        .stream()
-                        .map(Mapper::fromMovieToMovieDTO)
-                        .collect(Collectors.toList());
-            }
+            case DURATION -> filtratedMovies = movieRepository
+                    .findAllByDurationBefore(Integer.valueOf(filteringMoviesDTO.getValue()))
+                    .stream()
+                    .map(Mapper::fromMovieToMovieDTO)
+                    .collect(Collectors.toList());
 
-            case GENRE -> {
-                if (Arrays.stream(Genre.values())
-                        .map(Enum::toString)
-                        .noneMatch(genre -> genre.equals(filteringMoviesDTO.getValue()))) {
-                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
-                }
-                filtratedMovies = movieRepository
-                        .findAllByGenre(Genre.valueOf(filteringMoviesDTO.getValue()))
-                        .stream()
-                        .map(Mapper::fromMovieToMovieDTO)
-                        .collect(Collectors.toList());
-            }
+            case GENRE -> filtratedMovies = movieRepository
+                    .findAllByGenre(Genre.valueOf(filteringMoviesDTO.getValue()))
+                    .stream()
+                    .map(Mapper::fromMovieToMovieDTO)
+                    .collect(Collectors.toList());
         }
         return filtratedMovies;
     }

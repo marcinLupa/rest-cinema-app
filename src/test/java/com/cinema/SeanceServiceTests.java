@@ -1,14 +1,14 @@
 package com.cinema;
 
-import com.cinema.application.dto.BuyingTicketsDTO;
-import com.cinema.application.dto.SeanceDTO;
-import com.cinema.application.service.SeanceService;
+import com.cinema.application.dto.FilteringMoviesDTO;
+import com.cinema.application.service.MovieService;
+import com.cinema.application.validator.impl.FilteringMovieDtoValidator;
 import com.cinema.domain.model.Movie;
 import com.cinema.domain.model.Place;
 import com.cinema.domain.model.Seance;
 import com.cinema.domain.model.enums.Genre;
-import com.cinema.domain.repository.SeanceRepository;
-import lombok.RequiredArgsConstructor;
+import com.cinema.infrastructure.exceptions.AppException;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +19,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.cinema.application.dto.enums.FilteringOption.GENRE;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class SeanceServiceTests {
@@ -41,31 +45,44 @@ public class SeanceServiceTests {
                             .build())
                     .build()
     );
-//    @Mock
+    //    @Mock
 //    private SeanceRepository seanceRepository;
 //
 //    @InjectMocks
 //    private SeanceService seanceService;
 //
-//    @Test
-//    @DisplayName("seance")
-//    public void test1() {
-//
-//        Mockito
-//                .when(seanceRepository
-//                        .findAll())
-//                .thenReturn(seances);
-//
-//   //     seanceRepository.findAll().forEach(System.out::println);
-//
-//        BuyingTicketsDTO buyingTicketsDTO = BuyingTicketsDTO.builder()
-//                .cityName("LEGNICA")
-//                .movieName("ACE VENTURA")
-//                .startOfSeance(LocalDateTime.parse("2017-11-09T10:44", DateTimeFormatter.ISO_DATE_TIME))
-//                .build();
-//
-//        Assertions.assertNotNull(seanceService.findByPlaceTitleDate(buyingTicketsDTO));
-//    }
+    @Mock
+    private FilteringMovieDtoValidator validator;
+
+    @InjectMocks
+    private MovieService movieService;
+/**good**/
+    @Test
+    @DisplayName("Movie Get Movies - test 1")
+    public void test1() {
+        Map<String,String> exc=new HashMap<>();
+        exc.put("egz1","egz1");
+
+        FilteringMoviesDTO filteringMoviesDTO = FilteringMoviesDTO.builder()
+                .option(GENRE)
+                .value("AAA")
+                .build();
+        Mockito.when(validator.validate(filteringMoviesDTO))
+                .thenReturn(exc);
+
+        Mockito.when(validator.hasErrors()).thenReturn(true);
+
+        Mockito.when(validator.getErrorMessage())
+                .thenReturn("egz1","egz1");
+
+        AppException app = Assertions.assertThrows(
+                AppException.class,
+                () -> movieService.getMovies(filteringMoviesDTO));
+        System.out.println(app.getMessage());
+
+        Assert.assertNotNull(app);
+
+    }
 }
 
 

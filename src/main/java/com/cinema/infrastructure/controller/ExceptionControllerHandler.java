@@ -9,7 +9,7 @@ public class ExceptionControllerHandler {
 
     @ExceptionHandler(MovieServiceException.class)
     public String handleMovieServiceException(MovieServiceException e) {
-        return "MSE: " +  e.getMessage();
+        return "MOVIE SERVICE EXCEPTION: " +  e.getMessage();
     }
 
 }

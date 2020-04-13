@@ -3,6 +3,9 @@ package com.cinema.application.service;
 import com.cinema.application.dto.*;
 import com.cinema.application.dto.enums.FilteringOption;
 import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.application.exceptions.TicketServiceException;
+import com.cinema.application.validator.impl.BuyingTicketsDtoValidator;
+import com.cinema.application.validator.impl.HistoryDtoValidator;
 import com.cinema.domain.model.enums.Discount;
 import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.TicketRepository;
@@ -27,7 +30,8 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final SeanceService seanceService;
     private final UserService userService;
-
+    private final BuyingTicketsDtoValidator buyingValidator;
+private final HistoryDtoValidator historyDtoValidator;
     /**
      * @role Role.ADMIN
      **/
@@ -75,7 +79,7 @@ public class TicketService {
 
     /**
      * Method buying tickets  ->
-     * @role Role.USER
+     *
      * @param buyingTicketsDTO have fields cityName, movieName, startOfSeance,email, ticketQuantity, discounts
      * @return returns tickets that are committed to date base
      * - finding user by e-mail,
@@ -83,12 +87,15 @@ public class TicketService {
      * - Merging tickets by quantity, client gives us quantity of tickets and discount for those tickets that he
      * is entitled to a discount. Other tickets have default value "NORMALNY", price is count by basic price and
      * actual discount for ticket
+     * @role Role.USER
      */
 
     public List<TicketDTO> buyingTickets(BuyingTicketsDTO buyingTicketsDTO) {
 
-        if (buyingTicketsDTO == null) {
-            throw new AppException("BUYING TICKET NULL");
+        buyingValidator.validate(buyingTicketsDTO);
+
+        if (buyingValidator.hasErrors()) {
+            throw new TicketServiceException(buyingValidator.getExceptionMessage());
         }
 
         UserDTO ticketBuyer = userService
@@ -136,8 +143,10 @@ public class TicketService {
      *
      */
     public List<TicketDTO> getHistory(HistoryDTO historyDTO) {
-        if (historyDTO == null) {
-            throw new AppException("HISTORY DTO IS NULL");
+
+        historyDtoValidator.validate(historyDTO);
+        if(historyDtoValidator.hasErrors()){
+            throw new TicketServiceException(historyDtoValidator.getExceptionMessage());
         }
         FilteringOption option = historyDTO.getOption();
 
@@ -145,9 +154,9 @@ public class TicketService {
 
         switch (option) {
             case BY_MONTHS_TRANSACTION_DATE -> {
-                if (!historyDTO.getValue().matches("[0-9]*")) {
-                    throw new AppException("VALUE IS NOT INTEGER");
-                }
+//                if (!historyDTO.getValue().matches("[0-9]*")) {
+//                    throw new AppException("VALUE IS NOT INTEGER");
+//                }
 
                 filteredTickets = ticketRepository
                         .findByTransactionDate(LocalDateTime
@@ -158,9 +167,9 @@ public class TicketService {
                         .collect(Collectors.toList());
             }
             case BY_PRICE -> {
-                if (!historyDTO.getValue().matches("[0-9]*")) {
-                    throw new AppException("VALUE IS NOT BIG DECIMAL");
-                }
+//                if (!historyDTO.getValue().matches("[0-9]*")) {
+//                    throw new AppException("VALUE IS NOT BIG DECIMAL");
+//                }
                 filteredTickets = ticketRepository
                         .findAllByPriceBefore(new BigDecimal(historyDTO.getValue()), historyDTO.getEmail())
                         .stream()
@@ -175,11 +184,11 @@ public class TicketService {
                     .collect(Collectors.toList());
 
             case BY_DISCOUNT -> {
-                if (Arrays.stream(Discount.values())
-                        .map(Enum::toString)
-                        .noneMatch(discount -> discount.equals(historyDTO.getValue()))) {
-                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
-                }
+//                if (Arrays.stream(Discount.values())
+//                        .map(Enum::toString)
+//                        .noneMatch(discount -> discount.equals(historyDTO.getValue()))) {
+//                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
+//                }
 
                 filteredTickets = ticketRepository
                         .findByDiscount(Discount.valueOf(historyDTO.getValue()), historyDTO.getEmail())
@@ -188,9 +197,9 @@ public class TicketService {
                         .collect(Collectors.toList());
             }
             case BY_PLACE -> {
-                if (!historyDTO.getValue().matches("[A-Z]*")) {
-                    throw new AppException("VALUE IS NOT LETTER PATTERN");
-                }
+//                if (!historyDTO.getValue().matches("[A-Z]*")) {
+//                    throw new AppException("VALUE IS NOT LETTER PATTERN");
+//                }
                 filteredTickets =
                         ticketRepository.findAllByPlaceName(historyDTO.getValue(), historyDTO.getEmail())
                                 .stream()
@@ -198,9 +207,9 @@ public class TicketService {
                                 .collect(Collectors.toList());
             }
             case BY_MONTHS_SEANCE_DATE -> {
-                if (!historyDTO.getValue().matches("[0-9]*")) {
-                    throw new AppException("VALUE IS NOT INTEGER");
-                }
+//                if (!historyDTO.getValue().matches("[0-9]*")) {
+//                    throw new AppException("VALUE IS NOT INTEGER");
+//                }
                 filteredTickets = ticketRepository
                         .findAllBySeanceStartOfSeance(LocalDateTime
                                 .now()
@@ -210,11 +219,11 @@ public class TicketService {
                         .collect(Collectors.toList());
             }
             case BY_MOVIE_GENRE -> {
-                if (Arrays.stream(Genre.values())
-                        .map(Enum::toString)
-                        .noneMatch(genre -> genre.equals(historyDTO.getValue()))) {
-                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
-                }
+//                if (Arrays.stream(Genre.values())
+//                        .map(Enum::toString)
+//                        .noneMatch(genre -> genre.equals(historyDTO.getValue()))) {
+//                    throw new AppException("VALUE IS NOT VALID ENUM TYPE");
+//                }
                 filteredTickets = ticketRepository
                         .findByMovieGenre(Genre.valueOf(historyDTO.getValue()), historyDTO.getEmail())
                         .stream()
