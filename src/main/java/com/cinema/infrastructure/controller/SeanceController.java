@@ -1,7 +1,7 @@
 package com.cinema.infrastructure.controller;
 
-import com.cinema.application.dto.SeanceDTO;
 import com.cinema.application.service.SeanceService;
+import com.cinema.domain.model.Seance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,21 +14,21 @@ public class SeanceController {
     private final SeanceService seanceService;
 
     @GetMapping("{id}")
-    public SeanceDTO findOne(@PathVariable Long id) {
+    public Seance findOne(@PathVariable Long id) {
         return seanceService
                 .findOne(id)
                 .orElseThrow();
     }
 
     @GetMapping
-    public List<SeanceDTO> findAll() {
+    public List<Seance> findAll() {
         return seanceService.findAll();
     }
 
     @PostMapping
-    public SeanceDTO add(@RequestBody SeanceDTO seanceDTO) {
+    public Seance add(@RequestBody Seance seance) {
         return seanceService
-                .add(seanceDTO)
+                .add(seance)
                 .orElseThrow();
     }
 

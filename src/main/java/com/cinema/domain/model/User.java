@@ -1,6 +1,6 @@
 package com.cinema.domain.model;
 
-import com.cinema.domain.model.enums.Role;
+import com.cinema.domain.model.role.Role;
 import com.cinema.domain.model.generic.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,14 +17,13 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    private String username;
+    private String password;
+    private String email;
+
     private String name;
     private String surname;
     private Integer age;
-    private String email;
-
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @OneToMany(mappedBy = "user")
     private Set<Ticket> tickets;
@@ -32,12 +31,20 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Movie> favoriteMovies;
 
-    public void addMovies(Movie... movies) {
-        if (movies != null) {
-            for (Movie m : movies) {
-                m.setUser(this);
-                favoriteMovies.add(m);
-            }
-        }
-    }
+//    public void addMovies(Movie... movies) {
+//        if (movies != null) {
+//            for (Movie m : movies) {
+//                m.setUser(this);
+//                favoriteMovies.add(m);
+//            }
+//        }
+//    }
+
+    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
+
 }

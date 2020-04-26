@@ -1,7 +1,7 @@
 package com.cinema.infrastructure.controller;
 
-import com.cinema.application.dto.PlaceDTO;
 import com.cinema.application.service.PlaceService;
+import com.cinema.domain.model.Place;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +15,21 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping("{id}")
-    public PlaceDTO findOne(@PathVariable Long id) {
+    public Place findOne(@PathVariable Long id) {
         return placeService
                 .findOne(id)
                 .orElseThrow();
     }
 
     @GetMapping
-    public List<PlaceDTO> findAll() {
+    public List<Place> findAll() {
         return placeService.findAll();
     }
 
     @PostMapping
-    public PlaceDTO add(@RequestBody PlaceDTO placeDTO) {
+    public Place add(@RequestBody Place place) {
         return placeService
-                .add(placeDTO)
+                .add(place)
                 .orElseThrow();
     }
 

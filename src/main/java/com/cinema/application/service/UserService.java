@@ -1,7 +1,8 @@
 package com.cinema.application.service;
 
-import com.cinema.application.dto.UserDTO;
-import com.cinema.application.dto.mapers.Mapper;
+
+import com.cinema.application.validator.impl.UserDtoValidator;
+import com.cinema.domain.model.User;
 import com.cinema.domain.repository.UserRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -10,48 +11,34 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserDtoValidator userDtoValidator;
 
     /**
      * @role Role.ADMIN
      **/
-    public Optional<UserDTO> findOne(Long id) {
+    public Optional<User> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE USER EXCEPTION");
         }
-        return Optional.of(Mapper.fromUserToUserDTO(userRepository
+        return Optional.of(userRepository
                 .findOne(id)
-                .orElseThrow()));
+                .orElseThrow());
     }
 
     /**
      * @role Role.ADMIN
      **/
-    public List<UserDTO> findAll() {
+    public List<User> findAll() {
         return userRepository
-                .findAll()
-                .stream()
-                .map(Mapper::fromUserToUserDTO)
-                .collect(Collectors.toList());
+                .findAll();
     }
 
-    /**
-     * @role Role.ADMIN
-     **/
-    public Optional<UserDTO> add(UserDTO userDTO) {
-        if (userDTO == null) {
-            throw new AppException("USER DTO IS NULL");
-        }
-        return Optional.of(Mapper.fromUserToUserDTO(userRepository
-                .save(Mapper.fromUserDTOtoUser(userDTO))
-                .orElseThrow()));
-    }
 
     /**
      * @role Role.ADMIN
@@ -66,10 +53,10 @@ public class UserService {
     /**
      * method only to help ticket service
      **/
-     Optional<UserDTO> findByEmail(String email) {
+     Optional<User> findByEmail(String email) {
 
-        return Optional.of(Mapper.fromUserToUserDTO(userRepository
+        return Optional.of(userRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new AppException("FIND BY EMAIL EXCEPTION"))));
+                .orElseThrow(() -> new AppException("FIND BY EMAIL EXCEPTION")));
     }
 }

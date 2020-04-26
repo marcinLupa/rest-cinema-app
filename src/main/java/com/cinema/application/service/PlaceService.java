@@ -1,7 +1,8 @@
 package com.cinema.application.service;
 
-import com.cinema.application.dto.PlaceDTO;
-import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.application.exceptions.ValidatorException;
+import com.cinema.application.validator.impl.PlaceDtoValidator;
+import com.cinema.domain.model.Place;
 import com.cinema.domain.repository.PlaceRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -18,46 +18,52 @@ import java.util.stream.Collectors;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final PlaceDtoValidator placeDtoValidator;
+
     /**
      * @role Role.ADMIN
      **/
-    public Optional<PlaceDTO> findOne(Long id) {
+    public Optional<Place> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE PLACE EXCEPTION");
         }
-        return Optional.of(Mapper.fromPlaceToPlaceDTO(placeRepository
-                .findOne(id)
-                .orElseThrow()));
-    }
-    /**
-     * @role Role.ADMIN
-     **/
-    public List<PlaceDTO> findAll() {
         return placeRepository
-                .findAll()
-                .stream()
-                .map(Mapper::fromPlaceToPlaceDTO)
-                .collect(Collectors.toList());
-    }
-    /**
-     * @role Role.ADMIN
-     **/
-    public Optional<PlaceDTO> add(PlaceDTO placeDTO) {
-        if (placeDTO == null) {
-            throw new AppException("PLACE DTO ADD EXCEPTION");
-        }
-        return Optional.of(Mapper.fromPlaceToPlaceDTO(placeRepository
-                .save(Mapper.fromPlaceDTOtoPlace(placeDTO))
-                .orElseThrow()));
-    }
-    /**
-     * @role Role.ADMIN
-     **/
-    public void delete(Long id) {
-        if (id == null) {
-            throw new AppException("DELETE PLACE ID EXCEPTION");
-        }
-        placeRepository.delete(id);
+                .findOne(id);
+
     }
 
-}
+    /**
+     * @role Role.ADMIN
+     **/
+    public List<Place> findAll() {
+        return placeRepository
+                .findAll();
+    }
+        /**
+         * @role Role.ADMIN
+         **/
+        public Optional<Place> add (Place place){
+            if (place == null) {
+                throw new AppException("PLACE DTO ADD EXCEPTION");
+            }
+            placeDtoValidator.validate(place);
+            if (placeDtoValidator.hasErrors()) {
+                throw new ValidatorException(placeDtoValidator.getExceptionMessage());
+            }
+
+            return Optional.of(placeRepository
+                    .save(place)
+                    .orElseThrow());
+        }
+
+        /**
+         * @role Role.ADMIN
+         **/
+        public void delete (Long id){
+            if (id == null) {
+                throw new AppException("DELETE PLACE ID EXCEPTION");
+            }
+            placeRepository.delete(id);
+        }
+
+    }

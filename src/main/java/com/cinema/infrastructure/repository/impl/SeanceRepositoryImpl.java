@@ -35,4 +35,12 @@ public class SeanceRepositoryImpl implements SeanceRepository {
         jpaSeanceRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<Seance> findBySeance(Seance seance) {
+        return jpaSeanceRepository
+                .findByStartOfSeanceAndMovieTitleAndAndPlace_Name(
+                        seance.getStartOfSeance()
+                        , seance.getMovie().getTitle()
+                        , seance.getPlace().getName());
+    }
 }

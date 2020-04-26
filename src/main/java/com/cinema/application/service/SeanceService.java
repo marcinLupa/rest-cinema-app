@@ -1,8 +1,9 @@
 package com.cinema.application.service;
 
 import com.cinema.application.dto.BuyingTicketsDTO;
-import com.cinema.application.dto.SeanceDTO;
-import com.cinema.application.dto.mapers.Mapper;
+import com.cinema.application.exceptions.ValidatorException;
+import com.cinema.application.validator.impl.SeanceDtoValidator;
+import com.cinema.domain.model.Seance;
 import com.cinema.domain.repository.SeanceRepository;
 import com.cinema.infrastructure.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
@@ -19,37 +20,39 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SeanceService {
     private final SeanceRepository seanceRepository;
+    private final SeanceDtoValidator seanceDtoValidator;
     /**
      * @role Role.ADMIN
      **/
-    public Optional<SeanceDTO> findOne(Long id) {
+    public Optional<Seance> findOne(Long id) {
         if (id == null) {
             throw new AppException("FIND ONE SEANCE EXCEPTION");
         }
-        return Optional.of(Mapper.fromSeanceToSeanceDTO(seanceRepository
+        return Optional.of(seanceRepository
                 .findOne(id)
-                .orElseThrow()));
+                .orElseThrow());
     }
     /**
      * @role Role.ADMIN
      **/
-    public List<SeanceDTO> findAll() {
+    public List<Seance> findAll() {
         return seanceRepository
-                .findAll()
-                .stream()
-                .map(Mapper::fromSeanceToSeanceDTO)
-                .collect(Collectors.toList());
+                .findAll();
     }
     /**
      * @role Role.ADMIN
      **/
-    public Optional<SeanceDTO> add(SeanceDTO seanceDTO) {
-        if (seanceDTO == null) {
+    public Optional<Seance> add(Seance seance) {
+        if (seance == null) {
             throw new AppException("SEANCE ADD SEANCE EXCEPTION");
         }
-        return Optional.of(Mapper.fromSeanceToSeanceDTO(seanceRepository
-                .save(Mapper.fromSeanceDTOtoSeance(seanceDTO))
-                .orElseThrow()));
+        seanceDtoValidator.validate(seance);
+
+        if (seanceDtoValidator.hasErrors()) {
+            throw new ValidatorException(seanceDtoValidator.getExceptionMessage());
+        }
+        return seanceRepository
+                .save(seance);
     }
     /**
      * @role Role.ADMIN
@@ -63,18 +66,18 @@ public class SeanceService {
     /**
      * method only to help ticket service
      **/
-     Optional<SeanceDTO> findByPlaceTitleDate(BuyingTicketsDTO buyingTicketsDTO) {
+     Optional<Seance> findByPlaceTitleDate(BuyingTicketsDTO buyingTicketsDTO) {
         if (buyingTicketsDTO == null) {
             throw new AppException("BUYING TICKET DTO IS NULL EXCEPTION");
         }
-        return Optional.of(Mapper.fromSeanceToSeanceDTO(seanceRepository
+        return Optional.of(seanceRepository
                 .findAll()
                 .stream()
                 .filter(x -> x.getMovie().getTitle().equals(buyingTicketsDTO.getMovieName()) &
                         x.getPlace().getName().equals(buyingTicketsDTO.getCityName()) &
                         x.getStartOfSeance().equals(buyingTicketsDTO.getStartOfSeance()))
                 .findFirst()
-                .orElseThrow(() -> new AppException("THERE IS NO SUCH SEANCE"))));
+                .orElseThrow(() -> new AppException("THERE IS NO SUCH SEANCE")));
 
     }
 

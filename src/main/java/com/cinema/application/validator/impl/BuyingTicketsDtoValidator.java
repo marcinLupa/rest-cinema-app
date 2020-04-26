@@ -4,11 +4,13 @@ import com.cinema.application.dto.BuyingTicketsDTO;
 import com.cinema.application.exceptions.TicketServiceException;
 import com.cinema.application.validator.AbstractValidator;
 import com.cinema.infrastructure.exceptions.AppException;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
+@Component
 public class BuyingTicketsDtoValidator extends AbstractValidator<BuyingTicketsDTO> {
     @Override
     public Map<String, String> validate(BuyingTicketsDTO item) {

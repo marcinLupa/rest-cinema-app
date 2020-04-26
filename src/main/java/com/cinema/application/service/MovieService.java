@@ -1,11 +1,10 @@
 package com.cinema.application.service;
 
 import com.cinema.application.dto.FilteringMoviesDTO;
-import com.cinema.application.dto.MovieDTO;
-import com.cinema.application.dto.mapers.Mapper;
 import com.cinema.application.exceptions.MovieServiceException;
 import com.cinema.application.validator.impl.FilteringMovieDtoValidator;
-import com.cinema.application.validator.impl.MovieDtoValidator;
+import com.cinema.application.validator.impl.MovieValidator;
+import com.cinema.domain.model.Movie;
 import com.cinema.domain.model.enums.Genre;
 import com.cinema.domain.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,46 +19,41 @@ import java.util.stream.Collectors;
 public class MovieService {
     private final MovieRepository movieRepository;
     private final FilteringMovieDtoValidator filteringValidator;
-    private final MovieDtoValidator validator;
+    private final MovieValidator validator;
 
 
     /**
      * @role Role.ADMIN
      **/
 
-    public Optional<MovieDTO> findOne(Long id) {
+    public Optional<Movie> findOne(Long id) {
         if (id == null) {
             throw new MovieServiceException("FIND ONE MOVIE EXCEPTION");
         }
-        return Optional.of(Mapper.fromMovieToMovieDTO(movieRepository
-                .findOne(id)
-                .orElseThrow()));
-    }
-
-    /**
-     * @role Role.ADMIN
-     **/
-    public List<MovieDTO> findAll() {
         return movieRepository
-                .findAll()
-                .stream()
-                .map(Mapper::fromMovieToMovieDTO)
-                .collect(Collectors.toList());
+                .findOne(id);
     }
 
     /**
      * @role Role.ADMIN
      **/
-    public Optional<MovieDTO> add(MovieDTO movieDTO) {
-        validator.validate(movieDTO);
+    public List<Movie> findAll() {
+        return movieRepository
+                .findAll();
+    }
 
+    /**
+     * @role Role.ADMIN
+     **/
+    public Optional<Movie> add(Movie movie) {
+        validator.validate(movie);
         if (validator.hasErrors()) {
             throw new MovieServiceException(validator.getExceptionMessage());
         }
 
-        return Optional.of(Mapper.fromMovieToMovieDTO(movieRepository
-                .save(Mapper.fromMovieDTOtoMovie(movieDTO))
-                .orElseThrow()));
+        return Optional.of(movieRepository
+                .save(movie)
+                .orElseThrow());
     }
 
     /**
@@ -82,7 +75,7 @@ public class MovieService {
      * - finding movies by e-mail title, duration and genre
      * @role Role.USER
      */
-    public List<MovieDTO> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
+    public List<Movie> getMovies(FilteringMoviesDTO filteringMoviesDTO) {
 
         filteringValidator.validate(filteringMoviesDTO);
 
@@ -90,27 +83,18 @@ public class MovieService {
 
             throw new MovieServiceException(filteringValidator.getExceptionMessage());
         }
-        List<MovieDTO> filtratedMovies = new ArrayList<>();
+        List<Movie> filtratedMovies = new ArrayList<>();
 
         switch (filteringMoviesDTO.getOption()) {
 
             case TITLE -> filtratedMovies = movieRepository
-                    .findByTitle(filteringMoviesDTO.getValue())
-                    .stream()
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
+                    .findByTitle(filteringMoviesDTO.getValue());
 
             case DURATION -> filtratedMovies = movieRepository
-                    .findAllByDurationBefore(Integer.valueOf(filteringMoviesDTO.getValue()))
-                    .stream()
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
+                    .findAllByDurationBefore(Integer.valueOf(filteringMoviesDTO.getValue()));
 
             case GENRE -> filtratedMovies = movieRepository
-                    .findAllByGenre(Genre.valueOf(filteringMoviesDTO.getValue()))
-                    .stream()
-                    .map(Mapper::fromMovieToMovieDTO)
-                    .collect(Collectors.toList());
+                    .findAllByGenre(Genre.valueOf(filteringMoviesDTO.getValue()));
         }
         return filtratedMovies;
     }

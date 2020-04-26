@@ -6,12 +6,13 @@ import com.cinema.application.validator.AbstractValidator;
 import com.cinema.domain.model.enums.Discount;
 import com.cinema.domain.model.enums.Genre;
 import com.cinema.infrastructure.exceptions.AppException;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
-
+@Component
 public class HistoryDtoValidator extends AbstractValidator<HistoryDTO> {
     @Override
     public Map<String, String> validate(HistoryDTO item) {

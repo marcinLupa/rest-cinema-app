@@ -1,8 +1,8 @@
 package com.cinema.infrastructure.controller;
 
 import com.cinema.application.dto.FilteringMoviesDTO;
-import com.cinema.application.dto.MovieDTO;
 import com.cinema.application.service.MovieService;
+import com.cinema.domain.model.Movie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,21 +16,21 @@ public class MovieController {
     private final MovieService movieService;
 
     @GetMapping("{id}")
-    public MovieDTO findOne(@PathVariable Long id) {
+    public Movie findOne(@PathVariable Long id) {
         return movieService
                 .findOne(id)
                 .orElseThrow();
     }
 
     @GetMapping
-    public List<MovieDTO> findAll() {
+    public List<Movie> findAll() {
         return movieService.findAll();
     }
 
     @PostMapping
-    public MovieDTO add(@RequestBody MovieDTO movieDTO) {
+    public Movie add(@RequestBody Movie movie) {
         return movieService
-                .add(movieDTO)
+                .add(movie)
                 .orElseThrow();
     }
 
@@ -41,7 +41,7 @@ public class MovieController {
 
     @PostMapping("/filtering")
 
-    public List<MovieDTO> filteringMovies(@RequestBody FilteringMoviesDTO filteringMoviesDTO) {
+    public List<Movie> filteringMovies(@RequestBody FilteringMoviesDTO filteringMoviesDTO) {
         return movieService
                 .getMovies(filteringMoviesDTO);
     }

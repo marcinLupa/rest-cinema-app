@@ -1,8 +1,6 @@
 package com.cinema.application.validator.impl;
 
-import com.cinema.application.dto.MovieDTO;
-import com.cinema.application.exceptions.MovieServiceException;
-import com.cinema.application.service.MovieService;
+import com.cinema.application.exceptions.ValidatorException;
 import com.cinema.application.validator.AbstractValidator;
 import com.cinema.domain.model.Movie;
 import com.cinema.domain.repository.MovieRepository;
@@ -14,11 +12,11 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class MovieDtoValidator extends AbstractValidator<MovieDTO> {
+public class MovieValidator extends AbstractValidator<Movie> {
 
     private final MovieRepository movieRepository;
     @Override
-    public Map<String, String> validate(MovieDTO item) {
+    public Map<String, String> validate(Movie item) {
         errors.clear();
 
         if (Objects.isNull(item)) {
@@ -34,7 +32,7 @@ public class MovieDtoValidator extends AbstractValidator<MovieDTO> {
 
     private boolean isOneByTitle(String title) {
         if (title == null) {
-            throw new MovieServiceException("FIND BY TITLE EXCEPTION");
+            throw new ValidatorException("FIND BY TITLE EXCEPTION");
         }
         return movieRepository
                 .findByTitle(title).isEmpty();

@@ -35,4 +35,5 @@ public class Ticket extends BaseEntity {
     private LocalDateTime transactionDate;
 
 
+
 }
