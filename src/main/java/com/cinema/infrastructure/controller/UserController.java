@@ -22,11 +22,11 @@ public class UserController {
                 .orElseThrow();
     }
 
-    @GetMapping
-    public List<User> findAll() {
-
-        return userService.findAll();
-    }
+//    @GetMapping
+//    public List<User> findAll() {
+//
+//        return userService.findAll();
+//    }
 
 //    @PostMapping
 //    public User add(@RequestBody RegisterUserDTO registerUserDTO) {

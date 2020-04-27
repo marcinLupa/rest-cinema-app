@@ -24,6 +24,7 @@ public class User extends BaseEntity {
     private String name;
     private String surname;
     private Integer age;
+    private Boolean activated;
 
     @OneToMany(mappedBy = "user")
     private Set<Ticket> tickets;
