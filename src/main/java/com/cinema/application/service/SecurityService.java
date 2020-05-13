@@ -27,7 +27,6 @@ public class SecurityService {
 
 
     public Long register(RegisterUserDTO registerUserDTO) {
-        System.out.println(registerUserDTO);
         if (Objects.isNull(registerUserDTO)) {
             throw new SecurityServiceException("REGISTER USER OBJECT IS NULL");
         }
@@ -92,8 +91,10 @@ public class SecurityService {
                 .orElseThrow(() -> new SecurityServiceException("cannot get verification token object"))
                 .getUser();
         user.setActivated(true);
+
         userRepository
                 .save(user);
+
         return user.getId();
     }
 }

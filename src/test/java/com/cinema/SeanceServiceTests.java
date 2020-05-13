@@ -72,7 +72,7 @@ public class SeanceServiceTests {
 
         Mockito.when(validator.hasErrors()).thenReturn(true);
 
-        Mockito.when(validator.getErrorMessage())
+        Mockito.when(validator.getExceptionMessage())
                 .thenReturn("egz1","egz1");
 
         AppException app = Assertions.assertThrows(
